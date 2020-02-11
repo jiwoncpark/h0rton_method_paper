@@ -1,0 +1,92 @@
+\RequirePackage{desc-tex/styles/docswitch}
+% \flag is set by the user, through the makefile:
+%    make note
+%    make apj
+% etc.
+%\setjournal{\flag}
+
+%\documentclass[\docopts]{\docclass}
+
+% You could also define the document class directly
+\documentclass[apj]{emulateapj}
+
+% Custom commands from LSST DESC, see texmf/styles/lsstdesc_macros.sty
+\usepackage{desc-tex/styles/lsstdesc_macros}
+\setcitestyle{authoryear, open={(},close={)}}
+\usepackage{graphicx}
+\usepackage{booktabs, tabularx, siunitx, multirow}
+\graphicspath{{./}{./figures/}}
+%\bibliographystyle{apj}
+
+% Add your own macros here:
+\begin{document}
+
+\title{Automated Lens Modeling with Bayesian Neural Networks for Inferring the Hubble Constant}
+
+\author{{Ji Won~Park} \altaffilmark{1, 2}, {Philip~J.~Marshall}\altaffilmark{1, 2},
+{Simon~Birrer}\altaffilmark{1, 2}
+{Aaron~Roodman}\altaffilmark{1, 2} and others}
+\altaffiltext{1}{Kavli Institute for Particle Astrophysics and Cosmology, Department of Physics, Stanford University, Stanford, CA, 94305}
+\altaffiltext{2}{SLAC National Accelerator Laboratory, Menlo Park, CA, 94025}
+
+\maketitlepre
+
+\begin{abstract}
+
+  \input{sections/abstract.tex}
+
+\end{abstract}
+
+% Start second paper on hierarchical inference.
+
+% Keywords are ignored in the LSST DESC Note style:
+\dockeys{gravitational lensing: strong, cosmological parameters}
+
+\maketitlepost
+
+\section{Introduction}
+\label{sec:intro}
+\input{sections/intro.tex}
+
+\section{Methods}
+\label{sec:methods}
+\input{sections/methods.tex}
+
+\section{Results}
+\label{sec:results}
+\input{sections/results.tex}
+
+\section{Discussion}
+\label{sec:discussion}
+\input{sections/discussion.tex}
+
+\section{Conclusion}
+\label{sec:conclusion}
+\input{sections/conclusion.tex}
+
+\subsection*{Acknowledgments}
+
+%%% Here is where you should add your specific acknowledgments, remembering that some standard thanks will be added via the \code{desc-tex/ack/*.tex} and \code{contributions.tex} files.
+
+%This paper has undergone internal review in the LSST Dark Energy Science Collaboration. % REQUIRED if true
+
+\input{contributions} % Standard papers only: author contribution statements. For examples, see http://blogs.nature.com/nautilus/2007/11/post_12.html
+
+% This work used TBD kindly provided by Not-A-DESC Member and benefitted from comments by Another Non-DESC person.
+
+% Standard papers only: A.B.C. acknowledges support from grant 1234 from ...
+
+\input{desc-tex/ack/standard} % also available: key standard_short
+
+% This work used some telescope which is operated/funded by some agency or consortium or foundation ...
+
+% We acknowledge the use of An-External-Tool-like-NED-or-ADS.
+
+%{\it Facilities:} \facility{LSST}
+
+% Include both collaboration papers and external citations:
+\bibliography{h0rton_method}
+
+\end{document}
+
+% ======================================================================

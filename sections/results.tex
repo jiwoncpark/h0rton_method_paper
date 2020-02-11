@@ -1,0 +1,87 @@
+Train-dev is Baobab data. Validation in Rung 1 data.
+
+\subsection{Improving the source position prediction}
+
+Establish sensitivity to bias in the source position as demonstrated in \cite{birrer2019astrometric}. See Table \ref{table:source_pos}. For each method, we can show the image positions inferred from the predicted source positions on the same lens system, for a visualization of which model does best on recovering the true image positions.
+
+\begin{table*}
+\label{table:source_pos}
+\caption{Summary of experiments on source position recovery\footnotesize }
+\centering
+\begin{tabular}{l|l|SSSSSSSSS}
+    \toprule
+    \multirow{2}{*}{Experiment} &
+    \multirow{2}{*}{Method} &
+      \multicolumn{2}{c}{Train} &
+      \multicolumn{2}{c}{Validation} &
+      \multicolumn{3}{c}{Performance} \\
+      & 
+      & 
+      {N} & {Time (hr)} & 
+      {N} & {Time (hr)} &
+      {Precision} &
+      {Accuracy} &
+      {$\chi^2$} \\
+      \midrule
+    A1 & raw BNN 
+    & {N} & t
+    & {-} & t
+   \\
+    A2 & transformed input 
+    & {N} & t
+    & {-} & t
+   \\
+    A3 & regression with image positions 
+    & {N} & t
+    & {-} & t
+    \\
+    A4 & inbuilt magnification matrix 
+    & {N} & t 
+    & {-} & t 
+     \\
+    A5 & hybrid forward modeling 
+    & {N} & t 
+    & {-} & t 
+     \\
+    \bottomrule
+  \end{tabular}
+  %\begin{flushleft}
+  %Experiments varied in key features of the dataset: the proportion of %positives, generation procedure (emulated or fully simulated), sky %coverage, and cadence (WFD or DDF).
+  %\end{flushleft}
+\end{table*}%
+
+\subsection{Point spread function}
+Implicit in the input images of the training set is the shape of the point spread function (PSF). We can also experiment with explicitly parameterizing drizzled HST-like point spread functions, and have the network predict the parameters.
+
+\subsection{Dataset size}
+Establish that, as the number of predicted macromodel parameters increases, the parameter space grows exponentially (curse of dimensionality). Demonstrating that a training set that reasonably spans the space of the assumed conditional PDF is key to demonstrating the usefulness of any ML method.
+
+Increase the dataset size with the same data configuration (maybe the best combination of cross-validated hyperparameters) and observe the convergence with increasing number of images. Do this for both diagonal and empirical conditional PDFs.
+
+More important than convergence is the target precision.
+
+\subsection{Sensitivity tests}
+\subsubsection{Priors on $\kappa_{ext}$ and $r_{ani}$}
+Show a 3-by-3 cornerplot of the three metrics (like the one from the TDLMC) for the following combinations of priors on $\kappa_{ext}$ and $r_{ani}$. Each experiment takes a different shape or color.
+\begin{enumerate}
+    \item $\kappa_{ext} \sim N(0, 0.025^2)$ as used in \cite{ding2018time}
+    \item $\kappa_{ext} \sim N(0, 0.05^2)$
+    \item $\kappa_{ext} \sim N(0, 0.1^2)$
+\end{enumerate}
+\begin{enumerate}
+    \item $r_{ani} = r_{eff}$ as used in \cite{ding2018time}
+    \item $r_{ani} \sim U(0.5, 2)*r_{eff}$ as used in \cite{birrer2016mass}
+\end{enumerate}
+
+\subsubsection{Noise level}
+Some effective noise level increasing from 0 to the level of (some benchmark real data noise). Per-pixel SNR
+
+\subsubsection{Effect of image configuration}
+
+\subsubsection{Comparison to traditional forward-modeling}
+Quote precision
+How BNN performance scales with 
+3-4 pixels
+Moffat, with PSF FWHM
+
+increase exposure time

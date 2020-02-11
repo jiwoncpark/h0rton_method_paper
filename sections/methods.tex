@@ -1,0 +1,90 @@
+Role of BNN. List the parameters predicted $\xi_{lens}$ and which of the $\xi_{light}$ (source position, lens effective radius). Input, output. Build up to hierarchical inference. Focus on consistency between \cite{hezaveh2017fast} and \cite{wagnercarena2019double}.
+
+\subsection{Training set generation}
+Cite baobab paper in prep and link the GH. Say that we experimented with two different conditional PDFs, from which we sampled the macromodel parameters. One was where each parameter was sampled independently. Have a table like the TDLMC table? See \ref{table:conditional_pdf}. Another was where the parameters followed empirical distributions.
+
+Training set is samples from the interim prior...
+
+\begin{table}
+\label{table:conditional_pdf}
+\centering
+\caption{Parameter distribution}\label{para_config}
+\begin{tabular}{ l l}
+\hline
+Simulating ingredient & model and parameter values \\
+\hline\hline  
+A): redshift \\\hline 
+deflector redshift & $z_d \in {\rm Norm} (0.5\pm0.2)$ \\ 
+source redshift & $z_s \in {\rm Norm} (2.0\pm0.4)$ \\ 
+ \hline\hline
+% Rung1 and Rung2\\ \hline 
+\\B): deflector (image plane) \\
+\hline
+lensing galaxy mass & elliptical power-law \\ 
+\hline 
+SIS velocity dispersion & $v_d\in {\rm Norm} (250\pm25)$ km/s \\ 
+Einstein radius$^a$ &$R_{\rm Ein} = 4\pi v_d^2 \frac{D_{ds}}{D_{s}}$ \\ 
+mass slope & $s \in {\rm Norm} (2.0\pm 0.1)$ \\ 
+ellipticity & $q \in {\rm Uni} (0.7 \sim 1.0)$ \\ 
+elliptical axis angle & $\phi \in {\rm Uni} (0 \sim \pi) $ \\  
+\hline 
+lensing galaxy SB & \sersic\ profile \\ 
+\hline 
+total magnitude$^{b}$ & $ mag \in {\rm Uni} (17.0 \sim 19.0) $ magnitude \\
+effective radius & $R_{\rm eff} = R_{\rm Ein} * {\rm Uni} (0.5 \sim 1.0) $ \\ 
+\sersic\ index & $n \in {\rm Uni} (2.0 \sim 4.0) $\\
+ellipticity & $q \in {\rm Uni} (0.7 \sim 1.0)$ \\
+elliptical axis angle & $\phi \in {\rm Uni} (0 \sim \pi) $ \\
+\hline \hline
+
+\\C): AGN (source plane) \\
+\hline
+host galaxy SB & realistic galaxy\\
+\hline
+total magnitude & $ mag \in {\rm Uni} (22.5 \sim 20.0) $ magnitude \\
+effective radius$^c$ & $R_{\rm eff} \in {\rm Uni} (0\farcs{}37, 0\farcs{}45), $ {\scriptsize $1.0<z_s<1.5$ \par} \\
+&$R_{\rm eff} \in {\rm Uni} (0\farcs{}34, 0\farcs{}42), $  {\scriptsize $1.5<z_s<2.0$  \par} \\
+&$R_{\rm eff} \in {\rm Uni} (0\farcs{}31, 0\farcs{}35), $  {\scriptsize $2.0<z_s<2.5$  \par} \\
+&$R_{\rm eff} \in {\rm Uni} (0\farcs{}23, 0\farcs{}33), $  {\scriptsize $2.5<z_s<3.0$  \par} \\
+\hline
+active nuclear light & scaled point source \\
+\hline
+source plane total flux & $f_{\rm AGN} = f_{\rm host} * {\rm Uni} (0.8 \sim 1.25) $ \\
+ \\\hline \hline
+external shear \\
+\hline
+amplitudes & $ \gamma\ \in {\rm Uni} (0 \sim 0.05) $ \\
+shear axis angle & $\phi \in {\rm Uni} (0 \sim \pi) $ \\  
+\hline
+external convergency \\
+\hline
+external kappa$^d$ & $ \kappa_{\rm ext} \in {\rm Norm} (0 \pm 0.025) $ \\
+\hline
+\hline
+\end{tabular}
+  \begin{tablenotes}
+ 	 \footnotesize
+ 	 \item Notes:- In Rung3, the non-parameterized deflector (i.e., lensing galaxy mass and surface brightness) are adopted. Thus, the B part in the table is not adoptable for this rung. The distribution of ``Norm" means normal distribution and the ``Uni" means uniform distribution.
+	 \item ~~~~a: The scale of Einstein Radius by is in range [1$\farcs$00, 1$\farcs$20]. 
+	 \item ~~~~b: The flux value and the magnitude value are related by the equation: \\ $mag= -2.5 * log10(flux) + zp$, where $zp$ is the filter zeropoint in AB system. For filter WFC3/F160W, $zp = 25.9463$.
+	 \item ~~~~c: The effective radius of the realistic galaxy is measured by the Galfit, by considering them as \sersic\ profile.
+	 \item ~~~d: The value of $\kappa_{\rm ext}$ is randomly generated to calculate the time delay data. The information of this distribution is provided to the ``Good" teams as a measurement data.
+  \end{tablenotes}
+\end{table}
+
+\subsection{BNN posterior}
+What's the term to use for this? Cite \cite{wagnercarena2019double} and say the form was double Gaussian.
+
+\subsection{Posterior on $H_0$}
+Time delays, velocity dispersion are external data. Conditional PDF
+Introduce training set are samples from the interim prior.
+
+With importance sampling,
+\begin{align}
+    &p(\Omega | \Delta t_{AB}, \sigma_V, d_{HST}) \\
+    &\propto p(\Omega) \prod_{k} \int p(\Delta t_{AB}^{(k)} | \Omega, \xi_{lens}^{(k)}, \kappa_{ext}^{(k)})  \nonumber \\
+    & \quad \times p(\sigma_V^{(k)} | \Omega, \xi_{lens}^{(k)}, \xi_{light}^{(k)}, \kappa_{ext}^{(k)}, \beta_{ani}^{(k)})  \nonumber \\
+    & \quad \times p(\xi_{lens}^{(k)}, \xi_{light}^{(k)} | d_{HST}^{(k)}, \Omega_i) \times \frac{p(\xi_{lens}^{(k)}, \xi_{light}^{(k)} | \Omega)}{ p(\xi_{lens}^{(k)}, \xi_{light}^{(k)} | \Omega_i)} \nonumber \\
+    & \quad \times p(\kappa_{ext}^{(k)}) p(\beta_{ani}^{(k)}) 
+    \quad d \left( \xi_{lens}^{(k)}, \xi_{light}^{(k)} \right) d \kappa_{ext}^{(k)} d \beta_{ani}^{(k)} \nonumber
+\end{align}
